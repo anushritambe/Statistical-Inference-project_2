@@ -1,0 +1,60 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## **Statistical Inference: Project 2-Part 2(ToothGrowth)**
+
+Anushri Tambe
+
+date: "13/08/2019"
+output: pdf_document
+
+=====================================================
+
+## Overview
+In Part 2 of the course project is analyzing the ToothGrowth data in the R datasets package. Toothgrowth is a data frame with 60 observations on 3 variables.
+
+## 1.Load the ToothGrowth data and perform some basic exploratory data analyses
+
+```{r loading}
+library(ggplot2)
+library(datasets)
+data(ToothGrowth)
+dim(ToothGrowth)
+str(ToothGrowth)
+```
+
+## 2.Provide a basic summary of the data.
+
+```{r}
+summary(ToothGrowth)
+head(ToothGrowth)
+ggplot(ToothGrowth,aes(x=as.factor(dose),y=len,fill=supp))+ geom_bar(stat="identity")+facet_grid(.~supp)+xlab("Dose")+       ggtitle("Effect of dose on tooth length")
+dev.copy(png, file="plot.png")
+dev.off()
+```
+
+## 3.Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
+Null hypothesis is there is no effect on tooth growth of different supp types
+```{r}
+t.test(len ~ supp, data = ToothGrowth)
+```
+Here pvalue is 0.06063
+The confidence interval contains zero. Hence we can not reject the null hypothesis that the different supplement types have no effect on tooth length.
+
+```{r}
+doses_0.5 <- subset (ToothGrowth, dose == "0.5")
+doses_1.0 <- subset (ToothGrowth, dose == "1")
+doses_2.0 <- subset (ToothGrowth, dose == "2")
+t.test(len ~ supp, data = doses_0.5)
+t.test(len ~ supp, data = doses_1.0)
+t.test(len ~ supp, data = doses_2.0)
+```
+
+## 4.Conclusion
+
+Supplement types have no effect on tooth growth.
+
+Inreasing dose level leads to increased tooth growth.

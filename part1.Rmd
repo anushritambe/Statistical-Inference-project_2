@@ -1,0 +1,61 @@
+---
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+## **Statistical Inference: Project 2-Part 1**
+
+Anushri Tambe
+
+date: "12/08/2019"
+
+===========================================================
+
+## Overview
+
+In this part of project, we will investigate the behaviour of means for exponential distribution in R and compare it with the expected distribution obtained by Central Limit Theorem. Here we are taking lambda=0.2. First we draw the histogram of 40 random exponential values. Then we will simulate 1000 samples each of size 40 and we will draw the histogram of this simulation of average mean. We will then compare the theoratical and sample distribution.
+
+## Simulation 
+```{r simulation}
+set.seed(1234)
+n<- 40
+lambda<-0.2
+simdata<-matrix(rexp(1000*n, lambda),1000,n)
+```
+## 1.Show the sample mean and compare it to the theoretical mean of the distribution.
+```{r}
+rowmean<-rowMeans(simdata)
+samplemean=mean(rowmean)
+print(samplemean)
+t_mean<-1/lambda
+print(t_mean)
+```
+Histogram to understand the difference between two curves
+```{r hist}
+par(mfrow= c(1,2))
+hist(rexp(n,lambda), col = "yellow", xlab = "Means",
+     main="Distribution of 40 Samples")
+abline(v=t_mean, col = "red")
+
+hist(rowmean, col = "yellow", 
+     main="Distribution of Averages of Samples",
+     xlab="Mean")
+abline(v=t_mean, col="red")
+dev.copy(png,file="plot1.png")
+dev.off()
+```
+## 2.Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
+```{r}
+samplevar<-(sd(rowmean))^2
+print(samplevar)
+t_var<-(1/(lambda*sqrt(n)))^2
+print(t_var)
+```
+## 3.Show that the distribution is approximately normal.
+```{r}
+qqnorm(rowmean)
+qqline(rowmean,col="red")
+dev.copy(png,file="plot2.png")
+dev.off()
+```
